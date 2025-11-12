@@ -1,0 +1,160 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gradient-to-br from-pink-50 via-purple-50 to-pink-100 min-h-screen;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-gradient-to-r from-pink-500 to-purple-500 text-white font-semibold py-3 px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:scale-105;
+  }
+
+  .btn-secondary {
+    @apply bg-white text-gray-700 font-semibold py-3 px-6 rounded-full shadow-soft hover:shadow-soft-lg transition-all duration-300;
+  }
+
+  .input-field {
+    @apply w-full px-4 py-3 rounded-2xl bg-white shadow-inner-soft focus:outline-none focus:ring-2 focus:ring-pink-400 transition-all;
+  }
+
+  .card {
+    @apply bg-white rounded-3xl shadow-soft p-6;
+  }
+
+  .message-bubble {
+    @apply max-w-[70%] p-3 rounded-2xl shadow-sm;
+  }
+
+  .message-sent {
+    @apply bg-gradient-to-r from-pink-400 to-purple-400 text-white ml-auto rounded-br-sm;
+  }
+
+  .message-received {
+    @apply bg-white text-gray-800 mr-auto rounded-bl-sm;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #FFB6D9, #D4B4FF);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #FF8AC4, #B88AFF);
+}
+
+/* Hide scrollbar for Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #FFB6D9 transparent;
+}
+
+/* Prevent overflow */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+#root {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* Message bubbles - prevent overflow */
+.message-bubble {
+  max-width: 75%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+@media (max-width: 640px) {
+  .message-bubble {
+    max-width: 85%;
+  }
+}
+
+/* Celebration particles animation */
+@keyframes celebrationFloat {
+  0% {
+    transform: translateY(0) translateX(0) scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(100px) scale(1.5) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.celebration-particle {
+  position: fixed;
+  font-size: 2rem;
+  pointer-events: none;
+  z-index: 9999;
+  animation: celebrationFloat 3s ease-out forwards;
+}
+
+/* Pulse animation for online status */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Typing indicator animation */
+@keyframes typingDot {
+  0%, 60%, 100% {
+    transform: translateY(0);
+  }
+  30% {
+    transform: translateY(-10px);
+  }
+}
+
+.typing-dot {
+  animation: typingDot 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typing-dot:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+/* Smooth transitions */
+* {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+

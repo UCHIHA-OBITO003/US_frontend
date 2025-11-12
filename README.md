@@ -206,4 +206,3 @@ This is a personal project, but suggestions are welcome!
 
 MIT
 
-# US_frontend

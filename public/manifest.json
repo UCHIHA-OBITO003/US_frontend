@@ -1,0 +1,17 @@
+{
+  "name": "US - Chat App",
+  "short_name": "US",
+  "description": "Private messaging app for close friends",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#A066FF",
+  "background_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+
