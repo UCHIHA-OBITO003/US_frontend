@@ -228,6 +228,23 @@ const Chat = () => {
 
   const handleNewMessage = (message) => {
     console.log('📨 New message received:', message);
+    
+    // CRITICAL FIX: Only add message if it's between current user and current chat partner
+    const messageFromId = message.from._id || message.from;
+    const messageToId = message.to._id || message.to;
+    const currentUserId = user.id;
+    const currentPartnerId = partnerId;
+    
+    // Check if this message belongs to current conversation
+    const isRelevantMessage = 
+      (messageFromId === currentPartnerId && messageToId === currentUserId) || // Partner sent to me
+      (messageFromId === currentUserId && messageToId === currentPartnerId);    // I sent to partner
+    
+    if (!isRelevantMessage) {
+      console.log('⚠️ Message not for this chat, ignoring');
+      return;
+    }
+    
     setMessages(prev => {
       // Avoid duplicates
       if (prev.some(m => m._id === message._id)) {
@@ -237,10 +254,10 @@ const Chat = () => {
     });
     
     // Mark as read if it's for current user
-    if (message.to._id === user.id || message.to === user.id) {
+    if (messageToId === currentUserId) {
       socket?.emit('message_read', { 
         messageId: message._id, 
-        senderId: partnerId 
+        senderId: currentPartnerId 
       });
     }
   };
@@ -288,11 +305,23 @@ const Chat = () => {
   };
 
   const handleIncomingCall = (data) => {
+    // CRITICAL FIX: Only accept call if from current chat partner
+    if (data.from !== partnerId) {
+      console.log('⚠️ Incoming call not from current chat partner, ignoring');
+      return;
+    }
+    
     setIncomingCall(data);
     setShowVideoCall(true);
   };
 
   const handleReceivePoke = (data) => {
+    // CRITICAL FIX: Only process poke if from current chat partner
+    if (data.from !== partnerId) {
+      console.log('⚠️ Poke not from current chat partner, ignoring');
+      return;
+    }
+    
     toast(`${data.fromName} poked you! 👉`, {
       icon: '👉',
       duration: 3000,
@@ -305,6 +334,12 @@ const Chat = () => {
   };
 
   const handleYouTubeInvite = (data) => {
+    // CRITICAL FIX: Only process YouTube invite if from current chat partner
+    if (data.from !== partnerId) {
+      console.log('⚠️ YouTube invite not from current chat partner, ignoring');
+      return;
+    }
+    
     toast((t) => (
       <div>
         <p className="font-semibold mb-2">{partner.displayName} wants to watch YouTube together! 📺</p>
@@ -330,6 +365,12 @@ const Chat = () => {
   };
 
   const handleSpotifyInvite = (data) => {
+    // CRITICAL FIX: Only process Spotify invite if from current chat partner
+    if (data.from !== partnerId) {
+      console.log('⚠️ Spotify invite not from current chat partner, ignoring');
+      return;
+    }
+    
     toast((t) => (
       <div>
         <p className="font-semibold mb-2">{partner.displayName} wants to listen on Spotify together! 🎵</p>
@@ -501,6 +542,15 @@ const Chat = () => {
 
   const handleNewQuiz = (data) => {
     const { quiz } = data;
+    
+    // CRITICAL FIX: Only add quiz if it's from the current chat partner
+    const quizCreatorId = quiz.creator._id || quiz.creator;
+    const currentPartnerId = partnerId;
+    
+    if (quizCreatorId !== currentPartnerId) {
+      console.log('⚠️ Quiz not from current chat partner, ignoring');
+      return;
+    }
     
     // Add quiz as a message in chat
     const quizMessage = {
